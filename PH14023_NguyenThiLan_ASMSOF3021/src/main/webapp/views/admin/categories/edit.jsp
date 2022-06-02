@@ -7,8 +7,12 @@
 <title>Update Category</title>
 </head>
 <body>
-	<form:form method="Post" action="/IT16304.ASM/admin/categories/update"
+	<form:form method="POST" action="/IT16304.ASM/admin/categories/update/${category.id }"
 		modelAttribute="category">
+		<div>
+			<label>ID</label>
+			<form:input path="id" name="id" />
+		</div>
 		<div>
 			<label>Name</label>
 			<form:input path="name" name="name" />

@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import IT16304.ASM.entity.Account;
+import IT16304.ASM.entity.Category;
 import IT16304.ASM.model.AccountModel;
+import IT16304.ASM.model.CategoryModel;
 import IT16304.ASM.repository.AccountRepository;
 
 @Controller
@@ -45,14 +47,42 @@ public class AccountController {
 
 		return "redirect:/admin/accounts/index";
 	}
-
+	
 	@GetMapping("edit/{accountId}")
-	public String update(Model model, AccountModel accountModel,
-			@PathVariable("accountId") Integer accountId) {
-		Optional<Account> account = this.accountservice.findById(accountId);
-		model.addAttribute("account", account);
-		return "/admin/accounts/update";
+	public String edit(
+			@PathVariable("accountId") Account account,
+			@ModelAttribute("account") AccountModel accountModel) {
+		
+		accountModel.setId(account.getId());
+		accountModel.setUsername(account.getUsername());
+		accountModel.setFullname(account.getFullname());
+		accountModel.setEmail(account.getEmail());
+		accountModel.setPhoto(account.getPhoto());
+		accountModel.setAdmin(account.getAdmin());
+		return "admin/accounts/edit";
+	}
+	
+	
+//	@GetMapping("edit/{categoryId}")
+//	public String edit(@PathVariable("categoryId") Category category,
+//			@ModelAttribute("category") CategoryModel categoryModel) {
+//		
+//		categoryModel.setId(category.getId());
+//		categoryModel.setName(category.getName());
+//		
+//		return "admin/categories/edit";
+//	}
 
+	@PostMapping("update/{accountId}")
+	public String update(@PathVariable("accountId") Account account,
+			@ModelAttribute("account") AccountModel accountModel) {
+		account.setUsername(accountModel.getUsername());
+		account.setFullname(accountModel.getFullname());
+		account.setEmail(accountModel.getEmail());
+		account.setAdmin(account.getAdmin());
+		account.setPhoto(accountModel.getPhoto());
+		this.accountservice.save(account);
+		return "redirect:/admin/accounts/index";
 	}
 
 	@GetMapping("delete/{accountId}")

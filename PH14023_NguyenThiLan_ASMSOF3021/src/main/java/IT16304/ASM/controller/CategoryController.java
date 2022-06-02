@@ -29,13 +29,13 @@ import IT16304.ASM.servicce.CategoryService;
 public class CategoryController {
 	@Autowired
 	private CategoryRepository categoryService;
-	
+
 	@GetMapping("create")
 	public String create(@ModelAttribute("category") CategoryModel categoryModel) {
-		
+
 		return "/admin/categories/create";
 	}
-	
+
 	@PostMapping("store")
 	public String store(CategoryModel categoryModel) {
 		Category entity = new Category();
@@ -43,48 +43,42 @@ public class CategoryController {
 		categoryService.save(entity);
 		return "redirect:/admin/categories/create";
 	}
-	
+
 	@GetMapping("edit/{categoryId}")
-	public String edit(@PathVariable("categoryId") Long categoryid, Model model) {
-		Category item = this.categoryService.findById(categoryid).get();
+	public String edit(@PathVariable("categoryId") Category category,
+			@ModelAttribute("category") CategoryModel categoryModel) {
 		
-		model.addAttribute("category", item);
-		CategoryModel categoryModel = new CategoryModel();
-			
-			BeanUtils.copyProperties(item, categoryModel);
-//			categoryModel.setIsEdit(true);
+		categoryModel.setId(category.getId());
+		categoryModel.setName(category.getName());
 		
 		return "admin/categories/edit";
 	}
-	
-	@PostMapping("update")
-	public String update(Category category) {
-//		Category entity = new Category();
-		CategoryModel categoryModel = new CategoryModel();
-		BeanUtils.copyProperties(category, categoryModel);
+
+	@PostMapping("update/{categoryId}")
+	public String update(@PathVariable("categoryId") Category category,
+			@ModelAttribute("category") CategoryModel categoryModel) {
+		category.setName(categoryModel.getName());
 		categoryService.save(category);
 		return "redirect:/admin/categories/index";
 	}
-	
+
 	@GetMapping("delete/{categoryId}")
 	public String delete(@PathVariable("categoryId") Category categoryid) {
 		categoryService.delete(categoryid);
-		
+
 		return "redirect:/admin/categories/index";
 	}
-	
+
 	@GetMapping("index")
-	public String index(
-			Model model ,
-			@RequestParam(name = "page", defaultValue = "0") Integer page,
+	public String index(Model model, @RequestParam(name = "page", defaultValue = "0") Integer page,
 			@RequestParam(name = "size", defaultValue = "5") Integer size,
 			@RequestParam(name = "field") Optional<String> field) {
-		
-		Sort sort= Sort.by(Direction.DESC, field.orElse("name"));
+
+		Sort sort = Sort.by(Direction.DESC, field.orElse("name"));
 		Pageable pageable = PageRequest.of(page, size, sort);
 		Page<Category> data = this.categoryService.findAll(pageable);
 		model.addAttribute("data", data);
 		return "admin/categories/index";
 	}
-	
+
 }

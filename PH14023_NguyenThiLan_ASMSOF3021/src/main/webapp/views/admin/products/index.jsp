@@ -23,6 +23,7 @@
 			<th><a href="/IT16304.ASM/admin/products/index?field=price">Price</a></th>
 			<th><a href="/IT16304.ASM/admin/products/index?field=createDate">Create
 					Date</a></th>
+			<th>Category</th>
 			<th>Image</th>
 			<th colspan="2">Action</th>
 		</thead>
@@ -33,6 +34,7 @@
 					<td>${product.name }</td>
 					<td>${product.price }</td>
 					<td>${product.createDate}</td>
+					<td>${product.category_id.name}</td>
 					<td><img style="width: 100px; height: 100px"
 						src="${product.image }"></td>
 					<td><a

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import IT16304.ASM.entity.Category;
 import IT16304.ASM.entity.Product;
+import IT16304.ASM.model.CategoryModel;
 import IT16304.ASM.model.ProductModel;
 import IT16304.ASM.repository.CategoryRepository;
 import IT16304.ASM.repository.ProductRepository;
@@ -31,66 +32,70 @@ import IT16304.ASM.repository.ProductRepository;
 public class ProductController {
 	@Autowired
 	private ProductRepository productService;
-	
+
 	@Autowired
 	private CategoryRepository categoryService;
-	
+
 	@GetMapping("create")
 	public String create(@ModelAttribute("product") ProductModel productModel) {
-		
+
 		return "admin/products/create";
 	}
-	
+
 	@PostMapping("store")
-	public String store(Model model, 
-			ProductModel productModel
-			) {
+	public String store(Model model, ProductModel productModel) {
 		Product entity = new Product();
 		BeanUtils.copyProperties(productModel, entity);
 		entity.setCreateDate(new Date());
 		productModel.setAvaliable(0);
-		
+
 		this.productService.save(entity);
 		return "redirect:admin/products/index";
 	}
-	
+
 	@GetMapping("edit/{productId}")
-	public String edit(@PathVariable("productId") Integer productid, Model model) {
-		Optional<Product> opt = this.productService.findById(productid);
-		
-		ProductModel productModel = new ProductModel();
-		if(opt.isPresent()) {
-			Product entity = opt.get();
+	public String edit(@PathVariable("productId") Product product, 
+			@ModelAttribute("product") ProductModel productModel) {
 			
-			BeanUtils.copyProperties(entity, productModel);
-			model.addAttribute("product", productModel);
-		}else {
-			model.addAttribute("product", new Category());
-		}
-		return "admin/products/create";
+		productModel.setId(product.getId());
+		productModel.setName(product.getName());
+		productModel.setPrice(product.getPrice());
+		productModel.setImage(product.getImage());
+		productModel.setCategory_id(product.getCategory_id());
+		return "admin/products/edit";
 	}
 	
+	@PostMapping("update/{productId}")
+	public String update(@PathVariable("productId") Product product, 
+			@ModelAttribute("product") ProductModel productModel) {
+		product.setName(productModel.getName());
+		product.setPrice(productModel.getPrice());
+		product.setImage(productModel.getImage());
+		product.setCategory_id(productModel.getCategory_id());
+		this.productService.save(product);
+		return "redirect:/admin/products/index";
+	}
 	
+
 	@ModelAttribute("ctg")
-	public List<Category> categories(){
+	public List<Category> categories() {
 		return categoryService.findAll();
 	}
-	
+
 	@GetMapping("delete/{productId}")
 	public String delete(@PathVariable("productId") Product productId) {
 		this.productService.delete(productId);
-		return "admin/products/index";
+		return "redirect:/admin/products/index";
 	}
-	
-	
+
 	@GetMapping("index")
-	public String index(
-			Model model ,
-			@RequestParam(name = "page", defaultValue = "0") Integer page,
+	public String index(Model model, @RequestParam(name = "page", defaultValue = "0") Integer page,
 			@RequestParam(name = "size", defaultValue = "5") Integer size,
 			@RequestParam(name = "field") Optional<String> field) {
+		List<Category> category = this.categoryService.findAll();
+		model.addAttribute("category", category);
 		
-		Sort sort= Sort.by(Direction.DESC, field.orElse("name"));
+		Sort sort = Sort.by(Direction.DESC, field.orElse("name"));
 		Pageable pageable = PageRequest.of(page, size, sort);
 		Page<Product> data = this.productService.findAll(pageable);
 		model.addAttribute("data", data);

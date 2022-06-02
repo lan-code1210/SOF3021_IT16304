@@ -37,7 +37,7 @@
 					<td><img style="width: 100px; height: 100px" src="${account.photo }"></td>
 					<td>${account.activated == 0? "Not active": "Active" }</td>
 					<td>${account.admin == 0? "User": "Admin" }</td>
-					<td><a href="/IT16304.ASM/admin/accounts/update/${account.id }">Update</a></td>
+					<td><a href="/IT16304.ASM/admin/accounts/edit/${account.id }">Update</a></td>
 					<td><a
 						href="/IT16304.ASM/admin/accounts/delete/${account.id }">delete</a>
 					</td>

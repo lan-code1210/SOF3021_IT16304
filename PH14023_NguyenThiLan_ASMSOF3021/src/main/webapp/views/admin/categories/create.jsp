@@ -10,28 +10,12 @@
 <body>
 	<form:form method="POST" action="/IT16304.ASM/admin/categories/store"
 		modelAttribute="category">
-		<c:if test="${!isEdit }">
-		<div>
-			<label>Id</label>
-			<form:input path="id" name="id" />
-		</div>
-		</c:if>
-		<c:if test="${isEdit }">
-		<div>
-			<label>Id</label>
-			<form:input path="id" name="id" />
-		</div>
-		</c:if>
 		<div>
 			<label>Name</label>
 			<form:input path="name" name="name" />
 		</div>
-		<c:if test="${isEdit }">
+		
 		<form:button>Create</form:button>
-		</c:if>
-		<c:if test="${!isEdit }">
-		<form:button>Update</form:button>
-		</c:if>
 	</form:form>
 </body>
 </html>

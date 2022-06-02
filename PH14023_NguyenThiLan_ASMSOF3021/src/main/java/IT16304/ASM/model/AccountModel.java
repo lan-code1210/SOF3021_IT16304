@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountModel {
+	private int id;
 	@NotBlank
 	private String fullname;
 	

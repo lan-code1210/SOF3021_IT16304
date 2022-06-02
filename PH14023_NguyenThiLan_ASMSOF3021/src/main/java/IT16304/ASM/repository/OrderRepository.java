@@ -1,5 +1,9 @@
 package IT16304.ASM.repository;
 
-public interface OrderRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import IT16304.ASM.entity.Order;
+
+public interface OrderRepository extends JpaRepository<Order, Integer>{
 
 }
