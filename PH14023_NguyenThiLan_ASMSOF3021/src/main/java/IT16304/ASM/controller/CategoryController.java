@@ -37,7 +37,7 @@ public class CategoryController {
 	}
 	
 	@PostMapping("store")
-	public String store(Model model, CategoryModel categoryModel) {
+	public String store(CategoryModel categoryModel) {
 		Category entity = new Category();
 		BeanUtils.copyProperties(categoryModel, entity);
 		categoryService.save(entity);
@@ -46,28 +46,31 @@ public class CategoryController {
 	
 	@GetMapping("edit/{categoryId}")
 	public String edit(@PathVariable("categoryId") Long categoryid, Model model) {
-		Optional<Category>opt= categoryService.findById(categoryid);
+		Category item = this.categoryService.findById(categoryid).get();
 		
+		model.addAttribute("category", item);
 		CategoryModel categoryModel = new CategoryModel();
-		if(opt.isPresent()) {
-			Category entity = opt.get();
 			
-			BeanUtils.copyProperties(entity, categoryModel);
-			categoryModel.setIsEdit(true);
-			model.addAttribute("category", categoryModel);
-		}else {
-			model.addAttribute("category", new Category());
-		}
-		return "admin/categories/create";
+			BeanUtils.copyProperties(item, categoryModel);
+//			categoryModel.setIsEdit(true);
+		
+		return "admin/categories/edit";
 	}
 	
-	
+	@PostMapping("update")
+	public String update(Category category) {
+//		Category entity = new Category();
+		CategoryModel categoryModel = new CategoryModel();
+		BeanUtils.copyProperties(category, categoryModel);
+		categoryService.save(category);
+		return "redirect:/admin/categories/index";
+	}
 	
 	@GetMapping("delete/{categoryId}")
-	public String delete(@PathVariable("categoryId") Long categoryid) {
-		categoryService.deleteById(categoryid);
+	public String delete(@PathVariable("categoryId") Category categoryid) {
+		categoryService.delete(categoryid);
 		
-		return "admin/categories/index";
+		return "redirect:/admin/categories/index";
 	}
 	
 	@GetMapping("index")

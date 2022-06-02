@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -19,9 +19,10 @@
 	<table class="table table-striped">
 		<thead>
 			<th>ID</th>
-			<th><a href="/IT16304.ASM/admin/accounts/index?field=name">Name</a></th>
-			<th><a href="/IT16304.ASM/admin/accounts/index?field=price">Price</a></th>
-			<th><a href="/IT16304.ASM/admin/accounts/index?field=createDate">Create Date</a></th>
+			<th><a href="/IT16304.ASM/admin/products/index?field=name">Name</a></th>
+			<th><a href="/IT16304.ASM/admin/products/index?field=price">Price</a></th>
+			<th><a href="/IT16304.ASM/admin/products/index?field=createDate">Create
+					Date</a></th>
 			<th>Image</th>
 			<th colspan="2">Action</th>
 		</thead>
@@ -32,10 +33,12 @@
 					<td>${product.name }</td>
 					<td>${product.price }</td>
 					<td>${product.createDate}</td>
-					<td><img style="width: 100px; height: 100px" src="${account.image }"></td>
-					<td><a href="/IT16304.ASM/admin/products/update/${account.id }">Update</a></td>
+					<td><img style="width: 100px; height: 100px"
+						src="${product.image }"></td>
 					<td><a
-						href="/IT16304.ASM/admin/products/delete/${account.id }">delete</a>
+						href="/IT16304.ASM/admin/products/edit/${product.id }">Update</a></td>
+					<td><a
+						href="/IT16304.ASM/admin/products/delete/${product.id }">delete</a>
 					</td>
 				</tr>
 			</c:forEach>
@@ -43,29 +46,21 @@
 	</table>
 	<div>
 		<ul class="pagination">
-			<li class="page-item">
-				<a class="page-link" href="/IT16304.ASM/admin/accounts/index">
-					First page
-				</a>
-			</li>
-			<li class="page-item">
-				<a class="page-link" href="/IT16304.ASM/admin/accounts/index?page=${ data.number - 1 }">
-					Previos page
-				</a>
-			</li>
-			<li class="page-item">
-				<a class="page-link" href="/IT16304.ASM/admin/accounts/index?page=${ data.number + 1 }">
-					Next page
-				</a>
-			</li>
-			<li class="page-item">
-				<a class="page-link" href="/IT16304.ASM/admin/accounts/index?page=${ data.totalPages - 1 }">
-					Last page
-				</a>
-			</li>
+			<li class="page-item"><a class="page-link"
+				href="/IT16304.ASM/admin/products/index"> First page </a></li>
+			<li class="page-item"><a class="page-link"
+				href="/IT16304.ASM/admin/products/index?page=${ data.number - 1 }">
+					Previos page </a></li>
+			<li class="page-item"><a class="page-link"
+				href="/IT16304.ASM/admin/products/index?page=${ data.number + 1 }">
+					Next page </a></li>
+			<li class="page-item"><a class="page-link"
+				href="/IT16304.ASM/admin/products/index?page=${ data.totalPages - 1 }">
+					Last page </a></li>
 		</ul>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
 		integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"

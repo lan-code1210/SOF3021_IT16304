@@ -7,7 +7,7 @@
 <title>Update Category</title>
 </head>
 <body>
-	<form:form method="POST" action="/IT16304.ASM/admin/categories/store"
+	<form:form method="Post" action="/IT16304.ASM/admin/categories/update"
 		modelAttribute="category">
 		<div>
 			<label>Name</label>

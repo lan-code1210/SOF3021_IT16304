@@ -42,19 +42,21 @@ public class ProductController {
 	}
 	
 	@PostMapping("store")
-	public String store(Model model, ProductModel productModel) {
+	public String store(Model model, 
+			ProductModel productModel
+			) {
 		Product entity = new Product();
 		BeanUtils.copyProperties(productModel, entity);
-		productModel.setCreateDate(new Date());
+		entity.setCreateDate(new Date());
 		productModel.setAvaliable(0);
 		
 		this.productService.save(entity);
-		return "redirect:/admin/products/index";
+		return "redirect:admin/products/index";
 	}
 	
 	@GetMapping("edit/{productId}")
 	public String edit(@PathVariable("productId") Integer productid, Model model) {
-		Optional<Product>opt= this.productService.findById(productid);
+		Optional<Product> opt = this.productService.findById(productid);
 		
 		ProductModel productModel = new ProductModel();
 		if(opt.isPresent()) {
@@ -68,15 +70,15 @@ public class ProductController {
 		return "admin/products/create";
 	}
 	
+	
 	@ModelAttribute("ctg")
 	public List<Category> categories(){
 		return categoryService.findAll();
 	}
 	
 	@GetMapping("delete/{productId}")
-	public String delete(@PathVariable("productId") Integer productId) {
-		this.productService.deleteById(productId);
-		
+	public String delete(@PathVariable("productId") Product productId) {
+		this.productService.delete(productId);
 		return "admin/products/index";
 	}
 	
