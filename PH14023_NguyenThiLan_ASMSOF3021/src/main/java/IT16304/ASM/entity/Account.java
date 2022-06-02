@@ -15,9 +15,6 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "accounts")
-@NamedQueries(
-		@NamedQuery(name="Account.findByEmail", query="SELECT o FROM Account o WHERE email = :email")
-	)
 public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

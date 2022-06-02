@@ -1,5 +1,6 @@
 package IT16304.ASM.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,55 +21,65 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import IT16304.ASM.entity.Category;
-import IT16304.ASM.model.CategoryModel;
+import IT16304.ASM.entity.Product;
+import IT16304.ASM.model.ProductModel;
 import IT16304.ASM.repository.CategoryRepository;
-import IT16304.ASM.servicce.CategoryService;
+import IT16304.ASM.repository.ProductRepository;
 
 @Controller
-@RequestMapping("/admin/categories")
-public class CategoryController {
+@RequestMapping("admin/products")
+public class ProductController {
+	@Autowired
+	private ProductRepository productService;
+	
 	@Autowired
 	private CategoryRepository categoryService;
 	
 	@GetMapping("create")
-	public String create(@ModelAttribute("category") CategoryModel categoryModel) {
+	public String create(@ModelAttribute("product") ProductModel productModel) {
 		
-		return "/admin/categories/create";
+		return "admin/products/create";
 	}
 	
 	@PostMapping("store")
-	public String store(Model model, CategoryModel categoryModel) {
-		Category entity = new Category();
-		BeanUtils.copyProperties(categoryModel, entity);
-		categoryService.save(entity);
-		return "redirect:/admin/categories/create";
+	public String store(Model model, ProductModel productModel) {
+		Product entity = new Product();
+		BeanUtils.copyProperties(productModel, entity);
+		productModel.setCreateDate(new Date());
+		productModel.setAvaliable(0);
+		
+		this.productService.save(entity);
+		return "redirect:/admin/products/index";
 	}
 	
-	@GetMapping("edit/{categoryId}")
-	public String edit(@PathVariable("categoryId") Long categoryid, Model model) {
-		Optional<Category>opt= categoryService.findById(categoryid);
+	@GetMapping("edit/{productId}")
+	public String edit(@PathVariable("productId") Integer productid, Model model) {
+		Optional<Product>opt= this.productService.findById(productid);
 		
-		CategoryModel categoryModel = new CategoryModel();
+		ProductModel productModel = new ProductModel();
 		if(opt.isPresent()) {
-			Category entity = opt.get();
+			Product entity = opt.get();
 			
-			BeanUtils.copyProperties(entity, categoryModel);
-			categoryModel.setIsEdit(true);
-			model.addAttribute("category", categoryModel);
+			BeanUtils.copyProperties(entity, productModel);
+			model.addAttribute("product", productModel);
 		}else {
-			model.addAttribute("category", new Category());
+			model.addAttribute("product", new Category());
 		}
-		return "admin/categories/create";
+		return "admin/products/create";
 	}
 	
+	@ModelAttribute("ctg")
+	public List<Category> categories(){
+		return categoryService.findAll();
+	}
 	
-	
-	@GetMapping("delete/{categoryId}")
-	public String delete(@PathVariable("categoryId") Long categoryid) {
-		categoryService.deleteById(categoryid);
+	@GetMapping("delete/{productId}")
+	public String delete(@PathVariable("productId") Integer productId) {
+		this.productService.deleteById(productId);
 		
-		return "admin/categories/index";
+		return "admin/products/index";
 	}
+	
 	
 	@GetMapping("index")
 	public String index(
@@ -79,9 +90,8 @@ public class CategoryController {
 		
 		Sort sort= Sort.by(Direction.DESC, field.orElse("name"));
 		Pageable pageable = PageRequest.of(page, size, sort);
-		Page<Category> data = this.categoryService.findAll(pageable);
+		Page<Product> data = this.productService.findAll(pageable);
 		model.addAttribute("data", data);
-		return "admin/categories/index";
+		return "admin/products/index";
 	}
-	
 }
