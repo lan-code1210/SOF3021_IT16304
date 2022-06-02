@@ -52,7 +52,7 @@ public class OrderController {
 		BeanUtils.copyProperties(orderModel, entity);
 		entity.setCreateDate(new Date());
 		this.orderService.save(entity);
-		return "redirect:admin/orders/index";
+		return "redirect:/admin/orders/index";
 	}
 	
 	@ModelAttribute("user")
@@ -60,52 +60,45 @@ public class OrderController {
 		return this.accountService.findAll();
 	}
 
-//	@GetMapping("edit/{productId}")
-//	public String edit(@PathVariable("productId") Product product, 
-//			@ModelAttribute("product") ProductModel productModel) {
-//			
-//		productModel.setId(product.getId());
-//		productModel.setName(product.getName());
-//		productModel.setPrice(product.getPrice());
-//		productModel.setImage(product.getImage());
-//		productModel.setCategory_id(product.getCategory_id());
-//		return "admin/products/edit";
-//	}
-//	
-//	@PostMapping("update/{productId}")
-//	public String update(@PathVariable("productId") Product product, 
-//			@ModelAttribute("product") ProductModel productModel) {
-//		product.setName(productModel.getName());
-//		product.setPrice(productModel.getPrice());
-//		product.setImage(productModel.getImage());
-//		product.setCategory_id(productModel.getCategory_id());
-//		this.productService.save(product);
-//		return "redirect:/admin/products/index";
-//	}
-//	
-//
-//	@ModelAttribute("ctg")
-//	public List<Category> categories() {
-//		return categoryService.findAll();
-//	}
-//
-//	@GetMapping("delete/{productId}")
-//	public String delete(@PathVariable("productId") Product productId) {
-//		this.productService.delete(productId);
-//		return "redirect:/admin/products/index";
-//	}
-//
-//	@GetMapping("index")
-//	public String index(Model model, @RequestParam(name = "page", defaultValue = "0") Integer page,
-//			@RequestParam(name = "size", defaultValue = "5") Integer size,
-//			@RequestParam(name = "field") Optional<String> field) {
-//		List<Category> category = this.categoryService.findAll();
-//		model.addAttribute("category", category);
-//		
-//		Sort sort = Sort.by(Direction.DESC, field.orElse("name"));
-//		Pageable pageable = PageRequest.of(page, size, sort);
-//		Page<Product> data = this.productService.findAll(pageable);
-//		model.addAttribute("data", data);
-//		return "admin/products/index";
-//	}
+	@GetMapping("edit/{orderId}")
+	public String edit(@PathVariable("orderId") Order order, 
+			@ModelAttribute("order") OrderModel orderModel) {
+			
+		orderModel.setId(order.getId());
+		orderModel.setAddress(order.getAddress());
+		orderModel.setUser(order.getUser());
+		return "admin/orders/edit";
+	}
+	
+	@PostMapping("update/{orderId}")
+	public String update(@PathVariable("orderId") Order order, 
+			@ModelAttribute("order") OrderModel orderModel) {
+		order.setAddress(orderModel.getAddress());
+		order.setUser(orderModel.getUser());
+		this.orderService.save(order);
+		return "redirect:/admin/orders/index";
+	}
+	
+
+
+	@GetMapping("delete/{orderId}")
+	public String delete(@PathVariable("orderId") Order order) {
+		this.orderService.delete(order);
+		return "redirect:/admin/orders/index";
+	}
+
+	@GetMapping("index")
+	public String index(Model model, 
+			@RequestParam(name = "page", defaultValue = "0") Integer page,
+			@RequestParam(name = "size", defaultValue = "5") Integer size,
+			@RequestParam(name = "field") Optional<String> field) {
+		List<Account> account = this.accountService.findAll();
+		model.addAttribute("account", account);
+		
+		Sort sort = Sort.by(Direction.DESC, field.orElse("createDate"));
+		Pageable pageable = PageRequest.of(page, size, sort);
+		Page<Order> data = this.orderService.findAll(pageable);
+		model.addAttribute("data", data);
+		return "admin/orders/index";
+	}
 }

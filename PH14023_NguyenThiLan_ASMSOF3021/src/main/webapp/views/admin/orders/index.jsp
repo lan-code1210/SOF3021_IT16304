@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Product</title>
+<title>Order</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -14,33 +14,27 @@
 </head>
 <body>
 	<button type="button" class="btn btn-outline-primary">
-		<a href="/IT16304.ASM/admin/products/create">New Product</a>
+		<a href="/IT16304.ASM/admin/orders/create">New order</a>
 	</button>
 	<table class="table table-striped">
 		<thead>
 			<th>ID</th>
-			<th><a href="/IT16304.ASM/admin/products/index?field=name">Name</a></th>
-			<th><a href="/IT16304.ASM/admin/products/index?field=price">Price</a></th>
-			<th><a href="/IT16304.ASM/admin/products/index?field=createDate">Create
-					Date</a></th>
-			<th>Category</th>
-			<th>Image</th>
+			<th><a href="/IT16304.ASM/admin/orders/index?field=user">User</a></th>
+			<th><a href="/IT16304.ASM/admin/orders/index?field=address">Address</a></th>
+			<th><a href="/IT16304.ASM/admin/orders/index?field=createDate">Create Date</a></th>
 			<th colspan="2">Action</th>
 		</thead>
 		<tbody>
-			<c:forEach items="${data.content }" var="product">
+			<c:forEach items="${data.content }" var="order">
 				<tr>
-					<td>${product.id }</td>
-					<td>${product.name }</td>
-					<td>${product.price }</td>
-					<td>${product.createDate}</td>
-					<td>${product.category_id.name}</td>
-					<td><img style="width: 100px; height: 100px"
-						src="${product.image }"></td>
+					<td>${order.id }</td>
+					<td>${order.user.fullname}</td>
+					<td>${order.address }</td>
+					<td>${order.createDate}</td>
 					<td><a
-						href="/IT16304.ASM/admin/products/edit/${product.id }">Update</a></td>
+						href="/IT16304.ASM/admin/orders/edit/${order.id }">Update</a></td>
 					<td><a
-						href="/IT16304.ASM/admin/products/delete/${product.id }">delete</a>
+						href="/IT16304.ASM/admin/orders/delete/${order.id }">delete</a>
 					</td>
 				</tr>
 			</c:forEach>
@@ -49,15 +43,15 @@
 	<div>
 		<ul class="pagination">
 			<li class="page-item"><a class="page-link"
-				href="/IT16304.ASM/admin/products/index"> First page </a></li>
+				href="/IT16304.ASM/admin/orders/index"> First page </a></li>
 			<li class="page-item"><a class="page-link"
-				href="/IT16304.ASM/admin/products/index?page=${ data.number - 1 }">
+				href="/IT16304.ASM/admin/orders/index?page=${ data.number - 1 }">
 					Previos page </a></li>
 			<li class="page-item"><a class="page-link"
-				href="/IT16304.ASM/admin/products/index?page=${ data.number + 1 }">
+				href="/IT16304.ASM/admin/orders/index?page=${ data.number + 1 }">
 					Next page </a></li>
 			<li class="page-item"><a class="page-link"
-				href="/IT16304.ASM/admin/products/index?page=${ data.totalPages - 1 }">
+				href="/IT16304.ASM/admin/orders/index?page=${ data.totalPages - 1 }">
 					Last page </a></li>
 		</ul>
 	</div>
