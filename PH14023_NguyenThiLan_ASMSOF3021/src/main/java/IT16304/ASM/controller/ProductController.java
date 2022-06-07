@@ -37,8 +37,9 @@ public class ProductController {
 	private CategoryRepository categoryService;
 
 	@GetMapping("create")
-	public String create(@ModelAttribute("product") ProductModel productModel) {
-
+	public String create(Model model, @ModelAttribute("product") ProductModel productModel) {
+		List<Category> lisctg = this.categoryService.findAll();
+		model.addAttribute("ctg", lisctg);
 		return "admin/products/create";
 	}
 
@@ -54,9 +55,11 @@ public class ProductController {
 	}
 
 	@GetMapping("edit/{productId}")
-	public String edit(@PathVariable("productId") Product product, 
+	public String edit(Model model,
+			@PathVariable("productId") Product product, 
 			@ModelAttribute("product") ProductModel productModel) {
-			
+		List<Category> lisctg = this.categoryService.findAll();
+		model.addAttribute("ctg", lisctg);
 		productModel.setId(product.getId());
 		productModel.setName(product.getName());
 		productModel.setPrice(product.getPrice());
@@ -76,11 +79,6 @@ public class ProductController {
 		return "redirect:/admin/products/index";
 	}
 	
-
-	@ModelAttribute("ctg")
-	public List<Category> categories() {
-		return categoryService.findAll();
-	}
 
 	@GetMapping("delete/{productId}")
 	public String delete(@PathVariable("productId") Product productId) {

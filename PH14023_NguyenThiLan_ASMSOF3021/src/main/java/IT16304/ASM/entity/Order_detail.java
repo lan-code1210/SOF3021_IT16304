@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "order_detail")
+@Table(name = "order_details")
 public class Order_detail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class Order_detail {
 	
 	@ManyToOne
 	@JoinColumn(name = "order_id")
-	private Order oder;
+	private Order order;
 	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
