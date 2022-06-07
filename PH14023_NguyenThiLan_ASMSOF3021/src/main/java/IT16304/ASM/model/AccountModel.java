@@ -1,10 +1,14 @@
 package IT16304.ASM.model;
 
+
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,24 +20,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AccountModel {
 	private int id;
-	@NotBlank
+	
+	@NotBlank(message = "Fullname không được để trống")
 	private String fullname;
 	
-	@NotBlank
-	@Email
+	@NotBlank(message = "Email không được để trống")
+	@Email(message = "Email không đúng định dạng")
 	private String email;
 	
-	@NotBlank
+	@NotBlank(message = "Username không được để trống")
 	private String username;
 	
-	@NotBlank
-	@Max(value = 8)
+	@NotBlank(message = "Password không được để trống")
+	@Min(value = 8,message = "Password lớn hơn 6")
 	private String password;
 	
-	@NotBlank
+	@NotBlank(message = "Photo không được để trống")
 	private String photo;
 	
-	@NotEmpty
+	@NotNull(message = "Admin không được để trống")
 	private int admin;
 	
 	private Boolean isEdit = false;

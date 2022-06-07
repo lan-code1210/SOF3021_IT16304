@@ -14,18 +14,22 @@
 		<div>
 			<label>Fullname</label>
 			<form:input path="fullname" name="fullname"/>
+			<form:errors path="fullname" class="text-danger" style="color:red"/>
 		</div>
 		<div>
 			<label>Email</label>
 			<form:input path="email" name="email" type="email" />
+			<form:errors path="email" class="text-danger" style="color:red"/>
 		</div>
 		<div>
 			<label>Username</label>
 			<form:input path="username" name="username"/>
+			<form:errors path="username" class="text-danger" style="color:red"/>
 		</div>
 		<div>
 			<label>Photo</label>
 			<form:input path="photo" name="photo"/>
+			<form:errors path="photo" class="text-danger" style="color:red"/>
 		</div>
 		<div>
 			<label>Role</label>

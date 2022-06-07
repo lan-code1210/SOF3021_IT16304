@@ -51,7 +51,7 @@ public class OrderController {
 		Order entity = new Order();
 		BeanUtils.copyProperties(orderModel, entity);
 		entity.setCreateDate(new Date());
-		this.orderService.save(entity);
+		this.orderService.save(entity);   
 		return "redirect:/admin/orders/index";
 	}
 	

@@ -41,7 +41,7 @@ public class CategoryController {
 		Category entity = new Category();
 		BeanUtils.copyProperties(categoryModel, entity);
 		categoryService.save(entity);
-		return "redirect:/admin/categories/create";
+		return "redirect:/admin/categories/index";
 	}
 
 	@GetMapping("edit/{categoryId}")

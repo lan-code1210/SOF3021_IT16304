@@ -2,6 +2,8 @@ package IT16304.ASM.controller;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +34,6 @@ public class AccountController {
 	@Autowired
 	private AccountRepository accountservice;
 
-
 	@GetMapping("create")
 	public String create(@ModelAttribute("account") AccountModel account) {
 		return "/admin/accounts/create";
@@ -39,20 +41,25 @@ public class AccountController {
 	}
 
 	@PostMapping("store")
-	public String store(AccountModel accountModel) {
-		Account account = new Account();
-		BeanUtils.copyProperties(accountModel, account);
-		account.setActivated(0);
-		this.accountservice.save(account);
+	public String store(@Valid
+			@ModelAttribute("account") AccountModel accountModel,
+			BindingResult bin) {
+		if (bin.hasErrors()) {
+			System.out.println("Không hợp lệ");
+			return "/admin/accounts/create";
+		}
+			Account account = new Account();
+			BeanUtils.copyProperties(accountModel, account);
+			account.setActivated(0);
+			this.accountservice.save(account);
 
 		return "redirect:/admin/accounts/index";
 	}
-	
+
 	@GetMapping("edit/{accountId}")
-	public String edit(
-			@PathVariable("accountId") Account account,
+	public String edit(@PathVariable("accountId") Account account,
 			@ModelAttribute("account") AccountModel accountModel) {
-		
+
 		accountModel.setId(account.getId());
 		accountModel.setUsername(account.getUsername());
 		accountModel.setFullname(account.getFullname());
@@ -61,21 +68,14 @@ public class AccountController {
 		accountModel.setAdmin(account.getAdmin());
 		return "admin/accounts/edit";
 	}
-	
-	
-//	@GetMapping("edit/{categoryId}")
-//	public String edit(@PathVariable("categoryId") Category category,
-//			@ModelAttribute("category") CategoryModel categoryModel) {
-//		
-//		categoryModel.setId(category.getId());
-//		categoryModel.setName(category.getName());
-//		
-//		return "admin/categories/edit";
-//	}
 
 	@PostMapping("update/{accountId}")
-	public String update(@PathVariable("accountId") Account account,
-			@ModelAttribute("account") AccountModel accountModel) {
+	public String update( @PathVariable("accountId") Account account,
+		@Valid	@ModelAttribute("account") AccountModel accountModel,
+		BindingResult bin) {
+		if (bin.hasErrors()) {
+			return "/admin/accounts/edit";
+		}
 		account.setUsername(accountModel.getUsername());
 		account.setFullname(accountModel.getFullname());
 		account.setEmail(accountModel.getEmail());
@@ -93,8 +93,7 @@ public class AccountController {
 	}
 
 	@GetMapping("index")
-	public String index(Model model, 
-			@RequestParam(name = "page", defaultValue = "0") Integer page,
+	public String index(Model model, @RequestParam(name = "page", defaultValue = "0") Integer page,
 			@RequestParam(name = "size", defaultValue = "10") Integer size,
 			@RequestParam(name = "field") Optional<String> field) {
 
