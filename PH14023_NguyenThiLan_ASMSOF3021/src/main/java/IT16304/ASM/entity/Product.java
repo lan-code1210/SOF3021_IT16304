@@ -31,7 +31,7 @@ public class Product {
 	private String image;
 	
 	@Column(name = "price")
-	private String price;
+	private double price;
 	
 	@Column(name = "create_date")
 	// xác định độ chính xác về thời gian

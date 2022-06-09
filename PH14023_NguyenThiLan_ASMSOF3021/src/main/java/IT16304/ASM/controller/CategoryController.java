@@ -3,6 +3,8 @@ package IT16304.ASM.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,15 +40,22 @@ public class CategoryController {
 	}
 
 	@PostMapping("store")
-	public String store(CategoryModel categoryModel) {
-		Category entity = new Category();
+	public String store(
+			@Valid @ModelAttribute("category")	CategoryModel categoryModel,
+			BindingResult bin) {
+		if(bin.hasErrors()) {
+			return "/admin/categories/create";
+		}else {
+			Category entity = new Category();
 		BeanUtils.copyProperties(categoryModel, entity);
 		categoryService.save(entity);
 		return "redirect:/admin/categories/index";
+		}
 	}
 
 	@GetMapping("edit/{categoryId}")
-	public String edit(@PathVariable("categoryId") Category category,
+	public String edit(
+			@PathVariable("categoryId") Category category,
 			@ModelAttribute("category") CategoryModel categoryModel) {
 		
 		categoryModel.setId(category.getId());
@@ -55,11 +65,17 @@ public class CategoryController {
 	}
 
 	@PostMapping("update/{categoryId}")
-	public String update(@PathVariable("categoryId") Category category,
-			@ModelAttribute("category") CategoryModel categoryModel) {
-		category.setName(categoryModel.getName());
+	public String update(
+			@PathVariable("categoryId") Category category,
+			@Valid @ModelAttribute("category") CategoryModel categoryModel,
+			BindingResult bin) {
+		if (bin.hasErrors()) {
+			return "admin/categories/edit";
+		}else {
+			category.setName(categoryModel.getName());
 		categoryService.save(category);
 		return "redirect:/admin/categories/index";
+		}
 	}
 
 	@GetMapping("delete/{categoryId}")

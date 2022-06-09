@@ -14,6 +14,7 @@
 		<div>
 			<label>Address</label>
 			<form:input path="address" name="address"/>
+			<form:errors path="address" class="text-danger" style="color:red"/>
 		</div>
 		<div>
 			<label>User</label>

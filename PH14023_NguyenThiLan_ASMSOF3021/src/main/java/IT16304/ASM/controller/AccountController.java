@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import IT16304.ASM.EncrytUtil.EncryptUtil;
 import IT16304.ASM.entity.Account;
 import IT16304.ASM.entity.Category;
 import IT16304.ASM.model.AccountModel;
@@ -33,6 +34,9 @@ public class AccountController {
 
 	@Autowired
 	private AccountRepository accountservice;
+	
+//	@Autowired
+//	private EncryptUtil encryptUtil;
 
 	@GetMapping("create")
 	public String create(@ModelAttribute("account") AccountModel account) {
@@ -50,6 +54,7 @@ public class AccountController {
 		}
 			Account account = new Account();
 			BeanUtils.copyProperties(accountModel, account);
+			account.setPassword(EncryptUtil.encrypt(accountModel.getPassword()));
 			account.setActivated(0);
 			this.accountservice.save(account);
 
@@ -82,7 +87,7 @@ public class AccountController {
 		account.setAdmin(account.getAdmin());
 		account.setPhoto(accountModel.getPhoto());
 		this.accountservice.save(account);
-		return "redirect:/admin/accounts/index";
+		return "redirect:admin/accounts/index";
 	}
 
 	@GetMapping("delete/{accountId}")

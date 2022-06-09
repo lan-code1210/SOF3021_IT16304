@@ -16,6 +16,7 @@
 		<div>
 			<label>Name</label>
 			<form:input path="name" name="name" />
+			<form:errors path="name" class="text-danger" style="color:red"/>
 		</div>
 
 		<form:button>Update</form:button>

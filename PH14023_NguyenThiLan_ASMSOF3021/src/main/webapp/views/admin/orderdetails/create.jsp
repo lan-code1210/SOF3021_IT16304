@@ -25,10 +25,12 @@
 		<div>
 			<label>Quantity</label>
 			<form:input path="quantity" name="quantity" />
+			<form:errors path="quantity" class="text-danger" style="color:red"/>
 		</div>
 		<div>
 			<label>Price</label>
 			<form:input path="price" name="price"/>
+			<form:errors path="price" class="text-danger" style="color:red"/>
 		</div>
 		<form:button>Submit</form:button>
 	</form:form>

@@ -1,6 +1,7 @@
 package IT16304.ASM.model;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
@@ -13,8 +14,7 @@ import lombok.NoArgsConstructor;
 public class CategoryModel {
 	private Long id;
 	
-	@NotEmpty
-	@Min(value = 5)
+	@NotBlank(message = "Name không được để trống")
 	private String name;
 	
 	private Boolean isEdit = false;
