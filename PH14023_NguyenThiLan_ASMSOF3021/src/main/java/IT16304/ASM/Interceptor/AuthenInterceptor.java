@@ -19,9 +19,6 @@ public class AuthenInterceptor implements HandlerInterceptor {
 		if (account == null) {
 			response.sendRedirect("/IT16304.Asm/login");
 			return false;
-		}else if (account.getAdmin()== 1) {
-			response.sendRedirect("/IT16304.Asm/admin/accounts/index");
-			return false;
 		}
 
 		return true;
