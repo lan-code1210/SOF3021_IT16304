@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="Yinka Enoch Adedokun">
 <title>Login Page</title>
-<style type="">
+<style>
 .main-content {
 	width: 50%;
 	border-radius: 20px;
