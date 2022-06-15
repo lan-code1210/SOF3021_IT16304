@@ -19,7 +19,7 @@
 		<div>
 			<label>User</label>
 			<form:select path="user" name="user">
-			<form:options items="${user}" />
+			<form:options	items="${account }" />
 			</form:select>
 		</div>
 		<form:button>Submit</form:button>

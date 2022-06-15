@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -13,13 +14,18 @@
 		<div>
 			<label>Product</label>
 			<form:select path="product" name="product">
-			<form:options items="${listPro}" />
+			<c:forEach items="${listPro }" var="pro">
+			<form:option value="${pro.id}" >${pro.name }</form:option>
+			</c:forEach>
 			</form:select>
 		</div>
 		<div>
 			<label>Order</label>
 			<form:select path="order" name="order">
-			<form:options items="${listOrd}" />
+			<c:forEach items="${listOrd }" var="od">
+			<form:option value="${od.id}" >${od.address }</form:option>
+			</c:forEach>
+			
 			</form:select>
 		</div>
 		<div>

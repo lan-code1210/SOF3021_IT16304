@@ -1,9 +1,12 @@
 package IT16304.ASM.controller;
 
+import java.net.http.HttpRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -42,10 +45,19 @@ public class OrderController {
 
 	@Autowired
 	private AccountRepository accountService;
+	
+	@Autowired
+	private HttpSession session;
 
+	@Autowired
+	private HttpServletRequest request;
+	
 	@GetMapping("create")
-	public String create(@ModelAttribute("order") OrderModel orderModel) {
-
+	public String create(Model model,
+			@ModelAttribute("order") OrderModel orderModel) {
+//		Account account = (Account) request.getSession().getAttribute("user");
+		List<Account> account = this.accountService.findAll();
+		model.addAttribute("account", account);
 		return "admin/orders/create";
 	}
 
@@ -58,19 +70,18 @@ public class OrderController {
 			BeanUtils.copyProperties(orderModel, entity);
 			entity.setCreateDate(new Date());
 			this.orderService.save(entity);
+			session.setAttribute("message", "Thêm mới thành công!");
 			return "redirect:/admin/orders/index";
 		}
 
 	}
 
-	@ModelAttribute("user")
-	public List<Account> account() {
-		return this.accountService.findAll();
-	}
-
 	@GetMapping("edit/{orderId}")
-	public String edit(@PathVariable("orderId") Order order, @ModelAttribute("order") OrderModel orderModel) {
-
+	public String edit(Model model,
+			@PathVariable("orderId") Order order, @ModelAttribute("order") OrderModel orderModel) {
+		List<Account> account = this.accountService.findAll();
+		model.addAttribute("account", account);
+		
 		orderModel.setId(order.getId());
 		orderModel.setAddress(order.getAddress());
 		orderModel.setUser(order.getUser());
@@ -87,6 +98,7 @@ public class OrderController {
 		order.setAddress(orderModel.getAddress());
 		order.setUser(orderModel.getUser());
 		this.orderService.save(order);
+		session.setAttribute("message", "Sửa thành công!");
 		return "redirect:/admin/orders/index";
 		}
 	}
@@ -94,6 +106,7 @@ public class OrderController {
 	@GetMapping("delete/{orderId}")
 	public String delete(@PathVariable("orderId") Order order) {
 		this.orderService.delete(order);
+		session.setAttribute("message", "Xóa thành công!");
 		return "redirect:/admin/orders/index";
 	}
 

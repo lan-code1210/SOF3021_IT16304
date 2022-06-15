@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -38,7 +39,10 @@ public class ProductController {
 
 	@Autowired
 	private CategoryRepository categoryService;
-
+	
+	@Autowired
+	private HttpSession session;
+	
 	@GetMapping("create")
 	public String create(Model model, @ModelAttribute("product") ProductModel productModel) {
 		List<Category> lisctg = this.categoryService.findAll();
@@ -57,13 +61,15 @@ public class ProductController {
 			productModel.setAvaliable(0);
 
 			this.productService.save(entity);
-			return "redirect:admin/products/index";
+			session.setAttribute("message", "Thêm thành công!");
+			return "redirect:/admin/products/index";
 		}
 
 	}
 
 	@GetMapping("edit/{productId}")
-	public String edit(Model model, @PathVariable("productId") Product product,
+	public String edit(Model model,
+			@PathVariable("productId") Product product,
 			@ModelAttribute("product") ProductModel productModel) {
 		List<Category> lisctg = this.categoryService.findAll();
 		model.addAttribute("ctg", lisctg);
@@ -76,16 +82,19 @@ public class ProductController {
 	}
 
 	@PostMapping("update/{productId}")
-	public String update(@PathVariable("productId") Product product,
-			@Valid @ModelAttribute("product") ProductModel productModel, BindingResult bin) {
+	public String update(
+			@PathVariable("productId") Product product,
+			@Valid @ModelAttribute("product") ProductModel productModel, 
+			BindingResult bin) {
 		if (bin.hasErrors()) {
-			return "/admin/products/edit";
+			return "redirect:/admin/products/edit/{productId}";
 		} else {
 			product.setName(productModel.getName());
 			product.setPrice(productModel.getPrice());
 			product.setImage(productModel.getImage());
 			product.setCategory_id(productModel.getCategory_id());
 			this.productService.save(product);
+			session.setAttribute("message", "Sửa thành công!");
 			return "redirect:/admin/products/index";
 		}
 
@@ -94,11 +103,18 @@ public class ProductController {
 	@GetMapping("delete/{productId}")
 	public String delete(@PathVariable("productId") Product productId) {
 		this.productService.delete(productId);
+		session.setAttribute("message", "Xóa thành công!");
 		return "redirect:/admin/products/index";
+	}
+	
+	@ModelAttribute("listPro")
+	public List<Product> list(){
+		return this.productService.findAll();
 	}
 
 	@GetMapping("index")
-	public String index(Model model, @RequestParam(name = "page", defaultValue = "0") Integer page,
+	public String index(Model model, 
+			@RequestParam(name = "page", defaultValue = "0") Integer page,
 			@RequestParam(name = "size", defaultValue = "5") Integer size,
 			@RequestParam(name = "field") Optional<String> field) {
 		List<Category> category = this.categoryService.findAll();

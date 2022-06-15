@@ -13,6 +13,15 @@
 	crossorigin="anonymous">
 </head>
 <body>
+	<c:if test="${!empty sessionScope.message }">
+		<div class="alert alert-success">${sessionScope.message }</div>
+		<c:remove var="message" scope="session" />
+	</c:if>
+
+	<c:if test="${!empty sessionScope.error }">
+		<div class="alert alert-danger">${sessionScope.error }</div>
+		<c:remove var="error" scope="session" />
+	</c:if>
 	<button type="button" class="btn btn-outline-primary">
 		<a href="/IT16304.ASM/admin/products/create">New Product</a>
 	</button>
@@ -37,29 +46,54 @@
 					<td>${product.category_id.name}</td>
 					<td><img style="width: 100px; height: 100px"
 						src="${product.image }"></td>
-					<td><a
-						href="/IT16304.ASM/admin/products/edit/${product.id }">Update</a></td>
-					<td><a
-						href="/IT16304.ASM/admin/products/delete/${product.id }">delete</a>
-					</td>
+					<td><a href="/IT16304.ASM/admin/products/edit/${product.id }">Update</a></td>
+					<td>
+						<!-- Button trigger modal -->
+						<button type="button" class="btn btn-outline-danger"
+							data-bs-toggle="modal" data-bs-target="#exampleModal${product.id }">
+							Delete</button> <!-- Modal -->
+						<div class="modal fade" id="exampleModal${product.id }" tabindex="-1"
+							aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+										<button type="button" class="btn-close"
+											data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">Bạn có muốn xóa ${product.name }?</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-bs-dismiss="modal">Close</button>
+										<button type="button" class="btn btn-ouline-danger"><a
+						href="/IT16304.ASM/admin/products/delete/${product.id }">delete</a></button>
+									</div>
+								</div>
+							</div>
+						</div></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	<div>
-		<ul class="pagination">
-			<li class="page-item"><a class="page-link"
-				href="/IT16304.ASM/admin/products/index"> First page </a></li>
-			<li class="page-item"><a class="page-link"
-				href="/IT16304.ASM/admin/products/index?page=${ data.number - 1 }">
-					Previos page </a></li>
-			<li class="page-item"><a class="page-link"
-				href="/IT16304.ASM/admin/products/index?page=${ data.number + 1 }">
-					Next page </a></li>
-			<li class="page-item"><a class="page-link"
-				href="/IT16304.ASM/admin/products/index?page=${ data.totalPages - 1 }">
-					Last page </a></li>
-		</ul>
+		<nav aria-label="Page navigation example">
+			<ul class="pagination">
+				<li class="page-item"><a class="page-link"
+					href="/IT16304.ASM/admin/products/index" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+				</a></li>
+				<li class="page-item"><a class="page-link"
+					href="/IT16304.ASM/admin/products/index?page=0">1</a></li>
+				<li class="page-item"><a class="page-link"
+					href="/IT16304.ASM/admin/products/index?page=1">2</a></li>
+				<li class="page-item"><a class="page-link"
+					href="/IT16304.ASM/admin/products/index?page=2">3</a></li>
+				<li class="page-item"><a class="page-link"
+					href="/IT16304.ASM/admin/products/index?page=${ data.totalPages - 1 }"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				</a></li>
+			</ul>
+		</nav>
 	</div>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

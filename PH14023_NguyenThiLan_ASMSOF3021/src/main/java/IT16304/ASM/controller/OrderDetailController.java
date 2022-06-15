@@ -3,6 +3,7 @@ package IT16304.ASM.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -41,7 +42,8 @@ public class OrderDetailController {
 	private OrderRepository orderService;
 	@Autowired
 	private ProductRepository proService;
-
+	@Autowired
+	private HttpSession session;
 	@GetMapping("create")
 	public String create(@ModelAttribute("orderdetail") OrderDetailModel orderdetail, Model model) {
 		List<Order> listOrd = this.orderService.findAll();
@@ -66,6 +68,7 @@ public class OrderDetailController {
 			BeanUtils.copyProperties(orderde, ordde);
 
 			this.orderdeService.save(ordde);
+			session.setAttribute("message", "Thêm thành công!");
 			return "redirect:/admin/order_details/index";
 		}
 
@@ -86,6 +89,7 @@ public class OrderDetailController {
 	@GetMapping("delete/{id}")
 	public String delete(@PathVariable("id") Order_detail orderde) {
 		this.orderdeService.delete(orderde);
+		session.setAttribute("message", "Xóa thành công!");
 		return "redirect:/admin/order_details/index";
 	}
 
@@ -121,6 +125,7 @@ public class OrderDetailController {
 		order_detail.setQuantity(orderDetailModel.getQuantity());
 
 		this.orderdeService.save(order_detail);
+		session.setAttribute("message", "Sửa thành công!");
 		return "redirect:/admin/order_details/index";
 		}
 		

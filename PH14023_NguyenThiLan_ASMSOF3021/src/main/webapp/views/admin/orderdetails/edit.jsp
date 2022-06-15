@@ -23,6 +23,7 @@
 			</form:select>
 		</div>
 		<div>
+		<div>
 			<label>Quantity</label>
 			<form:input path="quantity" name="quantity" />
 			<form:errors path="quantity" class="text-danger" style="color:red"/>

@@ -17,7 +17,7 @@ public class AuthenInterceptor implements HandlerInterceptor {
 		///login
 		Account account = (Account) request.getSession().getAttribute("user");
 		if (account == null) {
-			response.sendRedirect("/IT16304.Asm/login");
+			response.sendRedirect("/IT16304.ASM/login");
 			return false;
 		}
 

@@ -2,6 +2,7 @@ package IT16304.ASM.controller;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -35,8 +36,8 @@ public class AccountController {
 	@Autowired
 	private AccountRepository accountservice;
 	
-//	@Autowired
-//	private EncryptUtil encryptUtil;
+	@Autowired
+	private HttpSession session;
 
 	@GetMapping("create")
 	public String create(@ModelAttribute("account") AccountModel account) {
@@ -57,7 +58,7 @@ public class AccountController {
 			account.setPassword(EncryptUtil.encrypt(accountModel.getPassword()));
 			account.setActivated(0);
 			this.accountservice.save(account);
-
+			session.setAttribute("message", "Thêm mới thành công");
 		return "redirect:/admin/accounts/index";
 	}
 
@@ -87,19 +88,20 @@ public class AccountController {
 		account.setAdmin(account.getAdmin());
 		account.setPhoto(accountModel.getPhoto());
 		this.accountservice.save(account);
+		session.setAttribute("message", "Sửa thành công");
 		return "redirect:admin/accounts/index";
 	}
 
 	@GetMapping("delete/{accountId}")
 	public String delete(@PathVariable("accountId") Integer accountId) {
 		this.accountservice.deleteById(accountId);
-		System.out.println("Thành Công");
+		session.setAttribute("message", "Xoá thành công");
 		return "redirect:/admin/accounts/index";
 	}
 
 	@GetMapping("index")
 	public String index(Model model, @RequestParam(name = "page", defaultValue = "0") Integer page,
-			@RequestParam(name = "size", defaultValue = "10") Integer size,
+			@RequestParam(name = "size", defaultValue = "5") Integer size,
 			@RequestParam(name = "field") Optional<String> field) {
 
 		Sort sort = Sort.by(Direction.DESC, field.orElse("username"));
